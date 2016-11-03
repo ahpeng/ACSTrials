@@ -1,0 +1,50 @@
+{
+  "agent1publicCount": {
+    "value": 3
+  },
+  "agent1publicEndpointDNSNamePrefix": {
+    "value": "jackagnt8"
+  },
+  "agent1publicSubnet": {
+    "value": "10.2.0.0/24"
+  },
+  "agent1publicVMSize": {
+    "value": "Standard_D2_v2"
+  },
+  "cassandraCount": {
+    "value": 1
+  },
+  "cassandraSubnet": {
+    "value": "10.0.0.0/24"
+  },
+  "cassandraVMSize": {
+    "value": "Standard_D3_v2"
+  },
+  "firstConsecutiveStaticIP": {
+    "value": "172.16.0.5"
+  },
+  "kafkaCount": {
+    "value": 1
+  },
+  "kafkaSubnet": {
+    "value": "10.1.0.0/24"
+  },
+  "kafkaVMSize": {
+    "value": "Standard_D2_v2"
+  },
+  "linuxAdminUsername": {
+    "value": "azureuser"
+  },
+  "masterEndpointDNSNamePrefix": {
+    "value": "jackmgmt8"
+  },
+  "masterSubnet": {
+    "value": "172.16.0.0/24"
+  },
+  "masterVMSize": {
+    "value": "Standard_D2_v2"
+  },
+  "sshRSAPublicKey": {
+    "value": "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAvJJ4yLcPVwnVKh7sJMXGKFRp0o7qgQ/IEzE/zgripnCpv1SyQ6CYqaXFFtVo9lESltlrJK4BVhcE5GPmfkNDwrPIfFNwHzUWKH923UGLs1Zr7AlRQkTbBevr6TN2A37mIZW5iaa/FYNukyycBgYDdlDDcq/uZWX7JtaXVSl/fAZ46SEmJDuvb49pbIWoQdUF7XaHxSl8jwtfttAxF0OwvJRgQ9eF/srLT07LoKAU7Slke5bdcc7efT/sPcoquArD8/1cujfgEq2R3q3rx+sw71KQF0GVxnBNoWrbkSj/FH076Q8MBPyFa8BGFpl3aFthIQgyO4e5kBpl4KmUzbVy/w== jomit"
+  }
+}

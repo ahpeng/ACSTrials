@@ -1,0 +1,72 @@
+﻿{
+  "id": "azure",
+  "groups": [
+    {
+      "apps": [
+        {
+          "id": "web",
+          "cpus": 0.2,
+          "mem": 500,
+          "instances": 1,
+          "ports": [
+            80
+          ],
+          "requirePorts": true,
+          "container": {
+            "docker": {
+              "image": "adtd/web:stage",
+              "network": "HOST",
+              "forcePullImage": true
+            },
+            "type": "DOCKER"
+          },
+          "dependencies": [
+            "/azure/demo/rest"
+          ]
+        },
+        {
+          "id": "rest",
+          "cpus": 0.5,
+          "mem": 500,
+          "instances": 1,
+          "ports": [
+            8080
+          ],
+          "requirePorts": true,
+          "container": {
+            "docker": {
+              "image": "adtd/rest:stage",
+              "network": "HOST",
+              "forcePullImage": true
+            },
+            "type": "DOCKER"
+          }
+        },
+        {
+          "id": "lb",
+          "cpus": 0.5,
+          "mem": 500,
+          "instances": 1,
+          "ports": [
+            80
+          ],
+          "env": {
+            "BACKENDS": "web-demo-azure.marathon.mesos:80"
+          },
+          "requirePorts": true,
+          "container": {
+            "docker": {
+              "image": "eeacms/haproxy",
+              "network": "HOST"
+            },
+            "type": "DOCKER"
+          },
+          "dependencies": [
+            "/azure/demo/web"
+          ]
+        }
+      ],
+      "id": "demo"
+    }
+  ]
+}

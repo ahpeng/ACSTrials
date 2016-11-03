@@ -1,0 +1,27 @@
+﻿{
+  "id": "nginxprivate",
+  "cpus": 1,
+  "mem": 1024,
+  "instances": 1,
+  "acceptedResourceRoles": [
+    "slave_public"
+  ],
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "jackregistry-exp.azurecr.io/samples/nginx",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80,
+          "servicePort": 9000,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  },
+  "uris": [
+    "https://dockerconfig.blob.core.windows.net/registry/docker.tar.gz"
+  ]
+}
