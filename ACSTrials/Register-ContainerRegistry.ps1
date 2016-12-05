@@ -2,7 +2,11 @@
 
 Select-AzureRmSubscription -SubscriptionName "Jomit's Internal Subscription"
 
-Register-AzureRmProviderFeature -FeatureName "PrivatePreview" -ProviderNamespace "Microsoft.ContainerRegistry" 
+#Register-AzureRmProviderFeature -FeatureName "PublicPreview" -ProviderNamespace "Microsoft.ContainerRegistry"
+
+Register-AzureRmResourceProvider -ProviderNamespace Microsoft.ContainerRegistry 
+
+UnRegister-AzureRm
 
 
 ## Setup SSH tunnel : https://azure.microsoft.com/en-us/documentation/articles/container-service-mesos-marathon-rest/
