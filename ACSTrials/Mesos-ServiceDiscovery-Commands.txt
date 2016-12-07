@@ -1,0 +1,94 @@
+﻿
+Mesos DNS
+(generates dns records for tasks, enables services to find each other)
+(azure provides dc/os dns which proxies request for mesos dns, do ifconfig and see the spartan network)
+--------------------------------------------------------------------------------------------------------------
+- Create a new application in Marathon named "test", 0.1 cpu, using flakio/httpenv:1 container and Bridged network
+  and in Ports & Service Discovery set container port as 80
+- SSH into the master node
+
+- curl <ip addresss>:<port> of the running test app instance
+- nslookup test.marathon.mesos
+- nslookup -type=SRV _test._tcp.marathon.mesos	
+- curl master.mesos:8123/v1/services/_test._tcp.marathon.mesos
+
+
+- To make all instances listen to a single port, edit the application and set the "hostPort" in the JSON to "4000". Click on [Change and Deploy Configuration]
+- It would stuck to generate other instances
+
+
+Minuteman Service 
+(provides Virutal IP's based on Netfilter IPTables and IPSet, its a distributed load balancer)
+(Preferred method for "East - West" service discovery in DC/OS, which is traffic between services)
+--------------------------------------------------------------------------------------------------------------
+- Create a new application in Marathon named "test", 0.1 cpu, using flakio/httpenv:1 container, Bridged network
+  and in Ports & Service Discovery set container port as 80, name as http and IP as 192.168.1.1:80
+- SSH into the master node
+
+- sudo ipset list
+- curl 192.168.1.1
+- scale the application to 5 instances
+- curl 192.168.1.1 again and check
+
+Metrics API of Minuteman
+---------------------------------------------------
+
+- curl localhost:41421/metrics  | jq
+- curl localhost:41421/vips | 
+
+
+
+Marathon-lb
+("North - South" traffic. For traffic coming into the load balancer)
+--------------------------------------------------------------------------------------------------------------
+- Install "marathon-lb" from Universe. Give 1 CPU
+
+- Open http://jomitmgmt.westus.cloudapp.azure.com:9090/haproxy?stats
+
+- Create new application with following marathon json:
+		{
+		  "id": "frontend",
+		  "cmd": null,
+		  "cpus": 0.2,
+		  "mem": 128,
+		  "disk": 0,
+		  "instances": 1,
+		  "container": {
+			"docker": {
+			  "image": "flakio/frontend:53",
+			  "network": "BRIDGE",
+			  "portMappings": [
+				{
+				  "containerPort": 80,
+				  "protocol": "tcp",
+				  "servicePort": 80,
+				  "name": null
+				}
+			  ]
+			},
+			"type": "DOCKER"
+		  },
+		  "labels": {
+			"HAPROXY_GROUP": "external"
+		  }
+		}
+
+- sudo docker -H 10.0.0.5:2375 ps	(check marathon-lb container is running on the public agent)
+
+- sudo docker -H 10.0.0.5:2375 exec <container id> ls /marathon-lb    (container id can be just first 3 numbers)
+- sudo docker -H 10.0.0.5:2375 exec <container id> cat /marathon-lb/haproxy.cfg
+
+- scale the frontend application to 3 instances
+- sudo docker -H 10.0.0.5:2375 exec <container id> cat /marathon-lb/haproxy.cfg  (check the haproxy configuration again, it should have all 3 at the end)
+
+- open http://jomitagents.westus.cloudapp.azure.com/   (this is the frontend app that we installed)
+
+
+
+
+
+
+
+
+
+
