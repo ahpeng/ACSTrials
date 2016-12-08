@@ -121,6 +121,15 @@ docker tag testwebapp:v1 jomit/testwebapp:v1
 docker push jomit/testwebapp:v1
 
 
+- Add a new "Execute Shell" Build step in jenkins with following details:
+
+	IMAGE_NAME="jomit/testwebapp:${BUILD_NUMBER}"
+	cd TestWebApp
+	docker login -u jomit -p P@ssw0rd -e jomitv@live.com
+	docker build -t $IMAGE_NAME .
+	docker push $IMAGE_NAME
+
+- 
 
 
 
