@@ -36,7 +36,6 @@
     <None Include="marathonfiles\marathon.json" />
     <None Include="marathonfiles\nginx-private.json" />
     <None Include="marathonfiles\nginx.json" />
-    <None Include="ACS-BuildingDistributedApplications-Notes.txt" />
     <None Include="Register-ContainerRegistry.ps1" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />

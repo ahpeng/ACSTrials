@@ -9,10 +9,10 @@ Mesos DNS
   and in Ports & Service Discovery set container port as 80
 - SSH into the master node
 
-- curl <ip addresss>:<port> of the running test app instance
-- nslookup test.marathon.mesos
-- nslookup -type=SRV _test._tcp.marathon.mesos	
-- curl master.mesos:8123/v1/services/_test._tcp.marathon.mesos
+curl <ip addresss>:<port> of the running test app instance
+nslookup test.marathon.mesos
+nslookup -type=SRV _test._tcp.marathon.mesos	
+curl master.mesos:8123/v1/services/_test._tcp.marathon.mesos
 
 
 - To make all instances listen to a single port, edit the application and set the "hostPort" in the JSON to "4000". Click on [Change and Deploy Configuration]
@@ -27,16 +27,16 @@ Minuteman Service
   and in Ports & Service Discovery set container port as 80, name as http and IP as 192.168.1.1:80
 - SSH into the master node
 
-- sudo ipset list
-- curl 192.168.1.1
-- scale the application to 5 instances
-- curl 192.168.1.1 again and check
+sudo ipset list
+curl 192.168.1.1
+scale the application to 5 instances
+curl 192.168.1.1 again and check
 
 Metrics API of Minuteman
 ---------------------------------------------------
 
-- curl localhost:41421/metrics  | jq
-- curl localhost:41421/vips | 
+curl localhost:41421/metrics  | jq
+curl localhost:41421/vips | 
 
 
 
@@ -75,13 +75,13 @@ Marathon-lb
 		  }
 		}
 
-- sudo docker -H 10.0.0.5:2375 ps	(check marathon-lb container is running on the public agent)
+sudo docker -H 10.0.0.5:2375 ps	(check marathon-lb container is running on the public agent)
 
-- sudo docker -H 10.0.0.5:2375 exec <container id> ls /marathon-lb    (container id can be just first 3 numbers)
-- sudo docker -H 10.0.0.5:2375 exec <container id> cat /marathon-lb/haproxy.cfg
+sudo docker -H 10.0.0.5:2375 exec <container id> ls /marathon-lb    (container id can be just first 3 numbers)
+sudo docker -H 10.0.0.5:2375 exec <container id> cat /marathon-lb/haproxy.cfg
 
 - scale the frontend application to 3 instances
-- sudo docker -H 10.0.0.5:2375 exec <container id> cat /marathon-lb/haproxy.cfg  (check the haproxy configuration again, it should have all 3 at the end)
+sudo docker -H 10.0.0.5:2375 exec <container id> cat /marathon-lb/haproxy.cfg  (check the haproxy configuration again, it should have all 3 at the end)
 
 - open http://jomitagents.westus.cloudapp.azure.com/   (this is the frontend app that we installed)
 
@@ -99,6 +99,30 @@ DEVOPS AND MICROSERVICES
 - add tcp health proble for 10001 and add load balancer rule for 10001
 
 - Open http://jomitagents.westus.cloudapp.azure.com:10001/service/jenkins/
+
+- Create a new free style project. Setup Git
+- Setup webhook in the github repo to post to http://jomitagents.westus.cloudapp.azure.com:10001/service/jenkins/github-webhook
+- checkin and see the build working
+
+Build ASP.net Core App
+-------------------------------------------------
+
+dotnet build -c release
+dotnet publish -c release -o app 
+docker build -t testwebapp:v1 .
+docker images
+docker ps
+			FOR /f "tokens=*" %i IN ('docker ps -a -q') DO docker rm %i	
+docker run -p 5000:80 -t testwebapp:v1
+
+
+docker login
+docker tag testwebapp:v1 jomit/testwebapp:v1
+docker push jomit/testwebapp:v1
+
+
+
+
 
 
 
