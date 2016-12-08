@@ -1,4 +1,6 @@
-﻿
+﻿SERVICE DISCOVERY
+========================================================================================
+
 Mesos DNS
 (generates dns records for tasks, enables services to find each other)
 (azure provides dc/os dns which proxies request for mesos dns, do ifconfig and see the spartan network)
@@ -82,6 +84,21 @@ Marathon-lb
 - sudo docker -H 10.0.0.5:2375 exec <container id> cat /marathon-lb/haproxy.cfg  (check the haproxy configuration again, it should have all 3 at the end)
 
 - open http://jomitagents.westus.cloudapp.azure.com/   (this is the frontend app that we installed)
+
+
+DEVOPS AND MICROSERVICES
+========================================================================================
+
+- Install Jenkins and change the configuration to connect with marathon-lb
+- Open DC/OS dashboard and under services, click jenkins and edit.
+
+- add "labels" :  "HAPROXY_GROUP": "external"
+- change "portDefinitions" to 10001 and 10002  (as these ports are under marathon-lb)
+
+- add nsg rule to allow port 10001 in agent nsg
+- add tcp health proble for 10001 and add load balancer rule for 10001
+
+- Open http://jomitagents.westus.cloudapp.azure.com:10001/service/jenkins/
 
 
 
