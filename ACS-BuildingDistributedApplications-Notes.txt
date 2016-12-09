@@ -104,6 +104,26 @@ DEVOPS AND MICROSERVICES
 - Setup webhook in the github repo to post to http://jomitagents.westus.cloudapp.azure.com:10001/service/jenkins/github-webhook
 - checkin and see the build working
 
+
+Install .Net Core in all agents (in our case 10.32.0.5 & 10.0.0.5)
+----------------------------------------------
+- export private key in open ssh format and copy to the master vm
+
+sudo ssh -i <opensshkey> jomit@10.32.0.5
+lsb_release -a	(check linux distro)
+
+sudo docker -H 10.32.0.5:2375 ps  (find the id of the jenkins container)
+sudo docker -H 10.32.0.5:2375 exec it <container id> bash 
+
+Below steps depend on the linux distro check here(https://www.microsoft.com/net/core#linuxubuntu)
+-----------------------------------------
+sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list' 
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
+sudo apt-get update
+
+sudo apt-get install dotnet-dev-1.0.0-preview2.1-003177
+
+
 Build ASP.net Core App
 -------------------------------------------------
 
@@ -129,7 +149,27 @@ docker push jomit/testwebapp:v1
 	docker build -t $IMAGE_NAME .
 	docker push $IMAGE_NAME
 
-- 
+- Add Marathon Task
+
+
+
+CONFIGURATION MANAGEMENT
+===========================================================
+Lots of options HashiCorp Vault, Consul, Zookeeper, etcd..
+We will try Azure Files and mount it to drive
+
+sudo apt-get update && sudo apt-get -y install cifs-utils
+
+sudo mkdir -p /mnt/configdata
+
+- Create storage account in Azure. Create a file share and get the requiremets parameters to run below command
+
+sudo mount -t cifs    \
+  //acsjenkinsfiles.file.core.windows.net/configdata /mnt/configdata \
+  -o vers=3.0,username=acsjenkinsfiles,password=<ACCESSKEY>,dir_mode=0777,file_mode=0777
+
+sudo ls -al /mnt/configdata
+
 
 
 
