@@ -171,8 +171,34 @@ sudo mount -t cifs    \
 sudo ls -al /mnt/configdata
 
 
+KUBERNETES CLUSTER FROM WINDOWS
+=============================================================
+- Create Resource group
+az acs create --orchestrator-type=kubernetes --resource-group=acs-kube --dns-prefix=jomit --name=kubernetes
 
+- Create folder .kube in the users directory manuallycl
+az acs kubernetes get-credentials --dns-prefix=jomit --location=westus
 
+az acs kubernetes install-cli
+
+- Add C:\Program Files (x86)\ to the system path. check if it contains kubectl.exe
+kubectl get nodes
+kubectl proxy
+- Open http://localhost:8001/ui
+
+cd nodeapp
+docker build -t jomit/nodeapp:v1 .
+docker push jomit/nodeapp:v1
+
+- Get the kubernetes command palette from https://github.com/brendandburns/vs-kubernetes
+- Open command palette in VS Code Ctrl+Shift+P
+- Or use the kubectl commands
+
+kubectl run nodeapp --image=jomit/nodeapp:v1
+kubectl get pods
+kubectl scale deployments nodeapp --replicas=3
+kubectl get pods
+kubectl expose deployments nodeapp --type=LoadBalancer --port=8000
 
 
 
