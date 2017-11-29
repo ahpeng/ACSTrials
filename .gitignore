@@ -251,3 +251,8 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+
+privatekey.ppk
+publickey
+
+.vscode/
