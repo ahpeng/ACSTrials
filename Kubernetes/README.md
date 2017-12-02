@@ -50,8 +50,27 @@
     `kubectl config view`       (copy the cluster url)
 
     Try the cluster url with `Authorization : Bearer <token>`
-    
 
 
+# Deploy an Application
 
+- Open dashboard `minikube dashboard`
+
+- Create new app name = `webserver`, image = `nginx:alpine`, pods = `3`
+
+    `kubectl get deployments`
+
+    `kubectl get replicasets`
+
+    `kubectl get pods`
+
+    `kubectl describe pod webserver-78b68cf8d9-jxqff`
+
+    `kubectl get pods -L app,label2`  (add additional 2 columns app, label2 to the output)
+
+    `kubectl get pods -l app=webserver`   (filter pods by labels)
+
+    `kubectl delete deployments webserver` 
+
+- Using CLI
     
