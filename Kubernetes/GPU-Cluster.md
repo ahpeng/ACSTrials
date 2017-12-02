@@ -18,7 +18,7 @@
 
     - Copy the `kubernetesgpu.json` to `examples` folder
 
-    `./bin/acs-engine deploy --subscription-id <id> --dns-prefix jack --location westus2 --auto-suffix examples/kubernetesgpu.json`
+    `./bin/acs-engine deploy --subscription-id <id> --resource-group jomitk8s --dns-prefix jomitk8s --location westus2 --api-model examples/kubernetesgpu.json`
 
     - This will generate all the artifacts including ARM templates inside `_outputs` folder and also deploy the ARM template to Azure.
 
@@ -42,15 +42,17 @@
 
         Check under `Capacity:`, `alpha.kubernetes.io/nvidia-gpu:  1`
 
-- 4) Verify GPU support is working
+    - Open Dashboard
+
+        `kubectl proxy` and then browse the `<url provided>/ui`
+
+- 4) Verify GPU support is working using `nvidia/cuba` image
 
     `kubectl create -f nvidia-smi.yaml`  (this would take some time)
 
     `kubectl get pods --show-all`  (to see the name of the pod with Status `Completed`)
 
-    `kubectl logs <pod name>`
-
-    ...
+    `kubectl logs <pod name>`  (this should print out a table which shows NVIDIA-SMI output with K80 or M60)
 
 
 - Other Resources

@@ -1,5 +1,5 @@
 apiVersion: batch/v1
-kind: Job
+kind: Job # We want a Job
 metadata:
   name: nvidia-smi
 spec:
@@ -8,25 +8,23 @@ spec:
       name: nvidia-smi
     spec:
       restartPolicy: Never
+      volumes: # Where the NVIDIA driver libraries and binaries are located on the host (note that libcuda is not needed to run nvidia-smi)
+      - name: bin
+        hostPath: 
+          path: /usr/lib/nvidia-384/bin
+      - name: lib
+        hostPath: 
+          path: /usr/lib/nvidia-384
       containers:
-      - image: nvidia/cuda
-        name: nvidia-smi
-        args:
+      - name: nvidia-smi
+        image: nvidia/cuda # Which image to run        
+        command: 
           - nvidia-smi
         resources:
           limits:
-            alpha.kubernetes.io/nvidia-gpu: 1
-          requests:
-            alpha.kubernetes.io/nvidia-gpu: 1  
-        volumeMounts:
-        - mountPath: /usr/bin/
-          name: binaries
-        - mountPath: /usr/lib/x86_64-linux-gnu
-          name: libraries
-      volumes:
-      - name: binaries
-        hostPath:
-          path: /usr/bin/
-      - name: libraries
-        hostPath:
-          path: /usr/lib/x86_64-linux-gnu
+            alpha.kubernetes.io/nvidia-gpu: 1 # Requesting 1 GPU
+        volumeMounts: # Where the NVIDIA driver libraries and binaries should be mounted inside our container
+        - name: bin
+          mountPath: /usr/local/nvidia/bin
+        - name: lib
+          mountPath: /usr/lib/nvidia
