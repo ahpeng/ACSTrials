@@ -54,8 +54,36 @@
 
     `kubectl logs <pod name>`  (this should print out a table which shows NVIDIA-SMI output with K80 or M60)
 
+- 5) ML Model training
 
-- Other Resources
+    - Create the docker image from sample code
+
+    `git clone https://github.com/wbuchwalter/tf-app-container-sample.git`
+
+    `docker build -f Dockerfile.gpu -t jomit/tf-server-gpu .`
+
+    `docker login`
+
+    `docker push jomit/tf-server-gpu`
+
+    `kubectl create -f tensorflow-trainer.yaml`
+
+
+
+# Helpers
+
+- SSH into an Agend Node
+    - First ssh into one of the master node 
+
+        `ssh -i azureuser_rsa azureuser@<Master Node Public IP>`
+
+    - Copy the `azureuser_rsa` private key on the master node
+
+    - Change permissions `sudo chmod 600 azureuser_rsa`
+
+    - `ssh -i azureuser_rsa azureuser@<Agent Private IP>`
+
+- Resources
     - https://github.com/Azure/acs-engine/blob/master/docs/kubernetes/deploy.md
     - https://github.com/Azure/acs-engine/blob/master/docs/kubernetes/gpu.md  
 
