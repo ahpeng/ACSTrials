@@ -82,32 +82,32 @@
 
 ## Running Jupyter Notebook
 
-    - Create new service and deployment
+- Create new service and deployment
 
-        `kubectl create -f tensorflow-jupyter.yaml`
+    - `kubectl create -f tensorflow-jupyter.yaml`
 
-        `kubectl describe pod <pod name>`  (It should show `Successfully assigned <pod> to <agent>` under Events table)
+    - `kubectl describe pod <pod name>`  (It should show `Successfully assigned <pod> to <agent>` under Events table)
 
-    - Get External IP with port 8888
+- Get External IP with port 8888
 
-        `kubectl expose pod <pod name> --type=LoadBalancer --name=jupyter-service` 
+    - `kubectl expose pod <pod name> --type=LoadBalancer --name=jupyter-service` 
 
-        `kubectl get svc tensorflow-jupyter -o=jsonpath={.status.loadBalancer.ingress[0].ip}`
+    - `kubectl get svc tensorflow-jupyter -o=jsonpath={.status.loadBalancer.ingress[0].ip}`
 
-    - Get the Jupyter URL from logs
+- Get the Jupyter URL from logs
 
-        `kubectl logs <pod name>`  (It show show a similar url : `http://localhost:8888/?token=dc2b2b0e0df49324c946bd3f2998c71239a5540559ef1023`)
+    - `kubectl logs <pod name>`  (It show show a similar url : `http://localhost:8888/?token=dc2b2b0e0df49324c946bd3f2998c71239a5540559ef1023`)
 
     - Browse the Jupyter URL using the token and external IP
 
-        `http://<External IP>:8888/?token=dc2b2b0e0df49324c946bd3f2998c71239a5540559ef1023`
+    - `http://<External IP>:8888/?token=dc2b2b0e0df49324c946bd3f2998c71239a5540559ef1023`
 
-# Helpers
+## Helpers
 
 - SSH into an Agent Node
     - First ssh into one of the master node 
 
-        `ssh -i azureuser_rsa azureuser@<Master Node Public IP>`
+        - `ssh -i azureuser_rsa azureuser@<Master Node Public IP>`
 
     - Copy the `azureuser_rsa` private key on the master node
 
