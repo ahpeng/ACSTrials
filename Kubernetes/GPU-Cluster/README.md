@@ -1,90 +1,86 @@
 # Creating Kubenetes Cluster with GPU VM's on Azure for training Machine Learning Models
 
-- Complie acs-engine
+## Compile acs-engine
 
-    - Need to use [acs-engine](https://github.com/Azure/acs-engine) to create the cluster as ACS does not support GPU VM's as of now. Run these commands to build [acs-engine from source](https://github.com/Azure/acs-engine/blob/master/docs/acsengine.md) on Ubuntu with docker installed:
+- Need to use [acs-engine](https://github.com/Azure/acs-engine) to create the cluster as ACS does not support GPU VM's as of now. Run these commands to build [acs-engine from source](https://github.com/Azure/acs-engine/blob/master/docs/acsengine.md) on Ubuntu with docker installed:
 
-    `git clone https://github.com/Azure/acs-engine.git`
+- `git clone https://github.com/Azure/acs-engine.git`
+- `cd acs-engine`
+- `./scripts/devenv.sh`
+- `make bootstrap`
+- `make build`
 
-    `cd acs-engine`
+## Deploy Cluster
 
-    `./scripts/devenv.sh`
+- Copy the `kubernetesgpu.json` to `examples` folder
 
-    `make bootstrap`
+- `./bin/acs-engine deploy --subscription-id <id> --resource-group jomitk8s --dns-prefix jomitk8s --location westus2 --api-model examples/kubernetesgpu.json`
 
-    `make build`
+- This will generate all the artifacts including ARM templates inside `_outputs` folder and also deploy the ARM template to Azure.
 
-- Deploy Cluster
+## Connect with the Cluster
 
-    - Copy the `kubernetesgpu.json` to `examples` folder
+- Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
-    `./bin/acs-engine deploy --subscription-id <id> --resource-group jomitk8s --dns-prefix jomitk8s --location westus2 --api-model examples/kubernetesgpu.json`
-
-    - This will generate all the artifacts including ARM templates inside `_outputs` folder and also deploy the ARM template to Azure.
-
-- Connect with the Cluster
-
-    - Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-
-    - Download the `_output/<your-dns-name>/kubeconfig/kubeconfig.westus2.JSON` file.
+- Download the `_output/<your-dns-name>/kubeconfig/kubeconfig.westus2.JSON` file.
         
-        `chmod 777 _output -R`  (may needed to change permissions for download)
+    - `chmod 777 _output -R`  (may needed to change permissions for download)
 
-    - Set the `KUBECONFIG` environment variable
+- Set the `KUBECONFIG` environment variable
 
-        `setx KUBECONFIG "<path>/kubeconfig.westus2.JSON"`  (for Windows)
+    - `setx KUBECONFIG "<path>/kubeconfig.westus2.JSON"`  (for Windows)
 
-    - Check if GPU Drivers are correctly installed
+- Check if GPU Drivers are correctly installed
 
-        `kubectl get nodes`
+    - `kubectl get nodes`
 
-        `kubectl describe node <name of agent pool 1>`
+    - `kubectl describe node <name of agent pool 1>`
 
-        Check under `Capacity:`, `alpha.kubernetes.io/nvidia-gpu:  1`
+    - Check under `Capacity:`, `alpha.kubernetes.io/nvidia-gpu:  1`
 
-    - Open Dashboard
+- Open Dashboard
 
-        `kubectl proxy` and then browse the `<url provided>/ui`
+    - `kubectl proxy` and then browse the `<url provided>/ui`
 
-- Verify GPU support is working using `nvidia/cuba` image
+## Verify GPU support is working using `nvidia/cuba` image
 
-    `kubectl create -f nvidia-smi.yaml`  (this would take some time)
+- `kubectl create -f nvidia-smi.yaml`  (this would take some time)
 
-    `kubectl get pods --show-all`  (to see the name of the pod with Status `Completed`)
+- `kubectl get pods --show-all`  (to see the name of the pod with Status `Completed`)
 
-    `kubectl logs <pod name>`  (this should print out a table which shows NVIDIA-SMI output with K80 or M60)
+- `kubectl logs <pod name>`  (this should print out a table which shows NVIDIA-SMI output with K80 or M60)
 
-- ML Model training (using exiting docker image)
+## ML Model training (using exiting docker image)
 
-    - [OPTIONAL] Create a new docker image based on this sample [repo](https://github.com/wbuchwalter/tf-app-container-sample) or any of your exiting repo's
+- [OPTIONAL] Create a new docker image based on this sample [repo](https://github.com/wbuchwalter/tf-app-container-sample) or any of your exiting repo's
 
-        `git clone <TODO : New Repo>`
+    - `git clone <TODO : New Repo>`
 
-        `docker build -f Dockerfile.gpu -t jomit/tf-server-gpu .`
+    - `docker build -f Dockerfile.gpu -t jomit/tf-server-gpu .`
 
-        `docker login`
+    - `docker login`
 
-        `docker push jomit/tf-server-gpu`
+    - `docker push jomit/tf-server-gpu`
 
-    - Create an Azure Blob Storage Account with a container named `checkpoints`
+- Create an Azure Blob Storage Account with a container named `checkpoints`
 
-    - Update the values in `tensorflow-trainer.yaml`
+- Update the values in `tensorflow-trainer.yaml`
 
-         `image`  (if using a custom image)
+    - `image`  (if using a custom image)
 
-         `STORAGE_ACCOUNT_NAME`
+    - `STORAGE_ACCOUNT_NAME`
          
-         `STORAGE_ACCOUNT_KEY` 
+    - `STORAGE_ACCOUNT_KEY` 
     
-    - Create Job in k8s
+- Create Job in k8s
 
-        `kubectl create -f tensorflow-trainer.yaml`
+    - `kubectl create -f tensorflow-trainer.yaml`
 
-    - Once Completed, check the logs and files in your Storage Account to verify
+- Once Completed, check the logs and files in your Storage Account to verify
 
-        `kubectl logs -f <pod name>`    
+    - `kubectl logs -f <pod name>`    
 
-- Running Jupyter Notebook
+## Running Jupyter Notebook
 
     - Create new service and deployment
 
