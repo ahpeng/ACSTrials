@@ -28,7 +28,7 @@ spec:
         - name: STORAGE_ACCOUNT_NAME
           value: mlgputraining
         - name: STORAGE_ACCOUNT_KEY
-          value: pjP4k9BulPDqTzIL4ACNEsw7VgD5sZ4jVfhkPhzSK9Tqag3N/36EF5CX/EK9C8MrwRuZVd7Jwf4nv82Sc0mQ+A==
+          value: <key>
         - name: LD_LIBRARY_PATH
           value: "/usr/lib/nvidia:/usr/lib/x86_64-linux-gnu:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64/"
         resources:
