@@ -54,9 +54,17 @@
 
 # Deploy an Application
 
-- Open dashboard `minikube dashboard`
+- Using Dashoard UI
 
-- Create new app name = `webserver`, image = `nginx:alpine`, pods = `3`
+    `minikube dashboard`
+
+    create new app name = `webserver`, image = `nginx:alpine`, pods = `3`
+
+- Using CLI
+
+    `kubectl create -f webserver.yaml`
+
+- Verify
 
     `kubectl get deployments`
 
@@ -72,5 +80,34 @@
 
     `kubectl delete deployments webserver` 
 
-- Using CLI
+- Using `NodePort` ServiceType
+
+    `kubectl create -f webserver.yaml`
+
+    `kubectl create -f webserver-svc.yaml`
+
+    `kubectl get service`
+
+    `kubectl describe svc web-service`   (get NodePort)
+    
+    (`web-service` uses `app=webserver` as a Selector, so it selected the 3 Pods created by `webserver.yaml`, which are listed as `Endpoints` here. So, when we send a request to our Service, it will be served by one of the Pods listed in the Endpoints section)
+
+    `minikube ip`  (get local IP)
+
+- Browse the Service
+
+    `http://<local IP>:<NodePort>`
+
+    
+
+
+
+
+
+
+
+
+
+
+
     
