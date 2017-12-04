@@ -54,28 +54,57 @@
 
     `kubectl logs <pod name>`  (this should print out a table which shows NVIDIA-SMI output with K80 or M60)
 
-- 5) ML Model training (using default image)
+- 5) ML Model training (using exiting docker image)
+
+    - [OPTIONAL] Create a new docker image based on this sample [repo](https://github.com/wbuchwalter/tf-app-container-sample) or any of your exiting repo's
+
+        `git clone <TODO : New Repo>`
+
+        `docker build -f Dockerfile.gpu -t jomit/tf-server-gpu .`
+
+        `docker login`
+
+        `docker push jomit/tf-server-gpu`
 
     - Create an Azure Blob Storage Account with a container named `checkpoints`
 
-    - Update the `STORAGE_ACCOUNT_NAME` and `STORAGE_ACCOUNT_KEY` values in `tensorflow-trainer.yaml` with your storage accounts details
+    - Update the values in `tensorflow-trainer.yaml`
+
+         `image`  (if using a custom image)
+
+         `STORAGE_ACCOUNT_NAME`
+         
+         `STORAGE_ACCOUNT_KEY` 
     
     - Create Job in k8s
 
         `kubectl create -f tensorflow-trainer.yaml`
 
-    - Once Completed, check the files in your Storage Account
+    - Once Completed, check the logs and files in your Storage Account to verify
 
-- 6) ML Model training (using custom code)
+        `kubectl logs -f <pod name>`    
 
-    `git clone <TODO : New Repo>`
+- 6) Running Jupyter Notebook
 
-    `docker build -f Dockerfile.gpu -t jomit/tf-server-gpu .`
+    - Create new service and deployment
 
-    `docker login`
+        `kubectl create -f tensorflow-jupyter.yaml`
 
-    `docker push jomit/tf-server-gpu`
+        `kubectl describe pod <pod name>`  (It should show `Successfully assigned <pod> to <agent>` under Events table)
 
+    - Get External IP with port 8888
+
+        `kubectl expose pod <pod name> --type=LoadBalancer --name=jupyter-service` 
+
+        `kubectl get svc tensorflow-jupyter -o=jsonpath={.status.loadBalancer.ingress[0].ip}`
+
+    - Get the Jupyter URL from logs
+
+        `kubectl logs <pod name>`  (It show show a similar url : `http://localhost:8888/?token=dc2b2b0e0df49324c946bd3f2998c71239a5540559ef1023`)
+
+    - Browse the Jupyter URL using the token and external IP
+
+        `http://<External IP>:8888/?token=dc2b2b0e0df49324c946bd3f2998c71239a5540559ef1023`
 
 # Helpers
 

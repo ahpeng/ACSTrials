@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tensorflow-jupyter
+  name: tensorflow-jupyter
+spec:
+  ports:
+  - port: 8888
+    targetPort: 8888
+  selector:
+    app: tensorflow-jupyter
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tensorflow-jupyter
+spec:
+  replicas: 1
+  template:
+    metadata:
+     labels:
+        app: tensorflow-jupyter
+    spec:
+      volumes:
+      - name: bin
+        hostPath: 
+          path: /usr/lib/nvidia-384/bin
+      - name: lib
+        hostPath: 
+          path: /usr/lib/nvidia-384
+      - name: libcuda
+        hostPath:
+          path: /usr/lib/x86_64-linux-gnu/libcuda.so.1
+      containers:
+      - name: tensorflow-jupyter
+        image: tensorflow/tensorflow:latest-gpu
+        ports:
+        - containerPort: 8888
+        env:
+        - name: STORAGE_ACCOUNT_NAME
+          value: mlgputraining
+        - name: STORAGE_ACCOUNT_KEY
+          value: <key>
+        - name: LD_LIBRARY_PATH
+          value: "/usr/lib/nvidia:/usr/lib/x86_64-linux-gnu:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64/"
+        resources:
+          requests:
+            alpha.kubernetes.io/nvidia-gpu: 1
+          limits:
+            alpha.kubernetes.io/nvidia-gpu: 1
+        volumeMounts:
+        - mountPath: /usr/local/nvidia/bin
+          name: bin
+        - mountPath: /usr/lib/nvidia
+          name: lib
+        - mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.1
+          name: libcuda
