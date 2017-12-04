@@ -1,6 +1,6 @@
 # Creating Kubenetes Cluster with GPU VM's on Azure for training Machine Learning Models
 
-- 1) Complie acs-engine
+- Complie acs-engine
 
     - Need to use [acs-engine](https://github.com/Azure/acs-engine) to create the cluster as ACS does not support GPU VM's as of now. Run these commands to build [acs-engine from source](https://github.com/Azure/acs-engine/blob/master/docs/acsengine.md) on Ubuntu with docker installed:
 
@@ -14,7 +14,7 @@
 
     `make build`
 
-- 2) Deploy Cluster
+- Deploy Cluster
 
     - Copy the `kubernetesgpu.json` to `examples` folder
 
@@ -22,7 +22,7 @@
 
     - This will generate all the artifacts including ARM templates inside `_outputs` folder and also deploy the ARM template to Azure.
 
-- 3) Connect with the Cluster
+- Connect with the Cluster
 
     - Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
 
@@ -46,7 +46,7 @@
 
         `kubectl proxy` and then browse the `<url provided>/ui`
 
-- 4) Verify GPU support is working using `nvidia/cuba` image
+- Verify GPU support is working using `nvidia/cuba` image
 
     `kubectl create -f nvidia-smi.yaml`  (this would take some time)
 
@@ -54,7 +54,7 @@
 
     `kubectl logs <pod name>`  (this should print out a table which shows NVIDIA-SMI output with K80 or M60)
 
-- 5) ML Model training (using exiting docker image)
+- ML Model training (using exiting docker image)
 
     - [OPTIONAL] Create a new docker image based on this sample [repo](https://github.com/wbuchwalter/tf-app-container-sample) or any of your exiting repo's
 
@@ -84,7 +84,7 @@
 
         `kubectl logs -f <pod name>`    
 
-- 6) Running Jupyter Notebook
+- Running Jupyter Notebook
 
     - Create new service and deployment
 
