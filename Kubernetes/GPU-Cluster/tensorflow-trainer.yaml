@@ -10,28 +10,37 @@ spec:
       name: tensorflow-trainer
     spec:
       volumes:
-      - name: binaries
+      - name: bin
+        hostPath: 
+          path: /usr/lib/nvidia-384/bin
+      - name: lib
+        hostPath: 
+          path: /usr/lib/nvidia-384
+      - name: libcuda
         hostPath:
-          path: /usr/bin/
-      - name: libraries
-        hostPath:
-          path: /usr/lib/x86_64-linux-gnu
+          path: /usr/lib/x86_64-linux-gnu/libcuda.so.1
       containers:
       - args:
         - --train
-        image: ritazh/tf-server-gpu
+        image: jomit/tf-server-gpu
         name: tensorflow-trainer
         env:
         - name: STORAGE_ACCOUNT_NAME
           value: mlgputraining
         - name: STORAGE_ACCOUNT_KEY
           value: pjP4k9BulPDqTzIL4ACNEsw7VgD5sZ4jVfhkPhzSK9Tqag3N/36EF5CX/EK9C8MrwRuZVd7Jwf4nv82Sc0mQ+A==
+        - name: LD_LIBRARY_PATH
+          value: "/usr/lib/nvidia:/usr/lib/x86_64-linux-gnu:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64/"
         resources:
+          requests:
+            alpha.kubernetes.io/nvidia-gpu: 1
           limits:
             alpha.kubernetes.io/nvidia-gpu: 1
         volumeMounts:
-        - mountPath: /usr/bin/
-          name: binaries
-        - mountPath: /usr/lib/x86_64-linux-gnu
-          name: libraries
+        - mountPath: /usr/local/nvidia/bin
+          name: bin
+        - mountPath: /usr/lib/nvidia
+          name: lib
+        - mountPath: /usr/lib/x86_64-linux-gnu/libcuda.so.1
+          name: libcuda
       restartPolicy: Never
