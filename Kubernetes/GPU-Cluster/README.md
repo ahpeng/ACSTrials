@@ -1,4 +1,4 @@
-# Creating Kubenetes Cluster with GPU VM's on Azure for training Machine Learning Models
+# Creating Kubernetes Cluster with GPU VM's on Azure for training Machine Learning Models
 
 ## Compile acs-engine
 
@@ -72,7 +72,7 @@
          
     - `STORAGE_ACCOUNT_KEY` 
     
-- Create Job in k8s
+- Create a new Job
 
     - `kubectl create -f tensorflow-trainer.yaml`
 
