@@ -1,8 +1,10 @@
-# Running Minikube locally
+# Introduction to Kubernetes
+
+## Running Minikube locally
 
 - https://kubernetes.io/docs/getting-started-guides/minikube/
 
-# Installing Minikube on Windows
+## Installing Minikube on Windows
 
 - Install VirtualBox
 - Download the [minikube-windows-amd64.exe](https://storage.googleapis.com/minikube/releases/latest/minikube-windows-amd64.exe) file, rename it to minikube.exe and add it to your path.
@@ -19,7 +21,7 @@
     `minikube stop`
 
 
-# Installing Minikube on Windows 10 with Hyper-V
+## Installing Minikube on Windows 10 with Hyper-V
 
 - Create new Virtual Switch in Hyper-V as [shown here](https://blogs.msdn.microsoft.com/wasimbloch/2017/01/23/setting-up-kubernetes-on-windows10-laptop-with-minikube/)
 
@@ -31,7 +33,7 @@
 
     `minikube dashboard`
 
-# kubectl
+## kubectl
 
 - Get Cluster Info
 
@@ -52,7 +54,7 @@
     Try the cluster url with `Authorization : Bearer <token>`
 
 
-# Deploy simple Application
+## Deploy simple Application
 
 - Using Dashoard UI
 
@@ -99,7 +101,7 @@
     `http://<local IP>:<NodePort>`
     
 
-# Using `hostPath` Volume Type
+## Using `hostPath` Volume Type
 
 - Create a volume folder on the host
 
@@ -121,6 +123,45 @@
 
 - Browse the Service using the local IP and NodePort as done before. (we should see our custom index.html content.)
 
-    `http://<local IP>:<NodePort>`
+    `http://<minikube local IP>:<NodePort>`
+
+
+## Deploying Muti-tier Application
+
+- Source code for the sample app is available [here](https://github.com/cloudyuga/rsvpapp)
+
+- Deploy Database
+
+    `cd RSVPApp`
+
+    `kubectl create -f db.yaml`
+
+    `kubectl create -f db-service.yaml`
+
+    `kubectl get deployments`
+    `kubectl get services`
+
+- Deploy Frontend
+
+    `kubectl create -f web.yaml`
+
+    `kubectl create -f web-service.yaml`
+
+    `kubectl get deployments`
+    `kubectl get services`
+
+- Browse the frontend using the local IP and NodePort as done before. (we should see our custom index.html content.)
+
+    `http://<minikube local IP>:<NodePort>`
+
+- Scaling the Frontend
+
+    `kubectl scale --replicas=4 -f web.yaml`
+
+    `kubectl get deployments`
+
+    Browse the frontend to see the `Service from Host` value change depending on which replica is serving the request.
+
+
 
 
