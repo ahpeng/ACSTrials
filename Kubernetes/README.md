@@ -163,5 +163,86 @@
     Browse the frontend to see the `Service from Host` value change depending on which replica is serving the request.
 
 
+## ConfigMaps
+
+- Create using literal values
+
+    `kubectl create configmap my-config --from-literal=key1=value1 --from-literal=key2=value2`
+
+    `kubectl get configmaps my-config -o yaml`
+
+- Create using file
+
+    `kubectl create -f customer1-configmap.yaml`
+
+    `kubectl describe configmap customer1`
+
+- Use inside Pods as Environment Variables (see [documentation](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#adding-configmap-data-to-a-volume) for more details)
+
+    see `RSVPApp\web-configmap.yaml`
+
+
+## Secrets
+
+- Create a new secret using command line
+
+    `echo 'mypassword' > password.txt`
+
+    `tr -Ccsu '\n' < password.txt > .strippedpassword.txt && mv .strippedpassword.txt password.txt` (Remove trailing new lines from the file)
+
+    `kubectl create secret generic my-password --from-file=password.txt`
+
+    `kubectl get secret my-password`
+
+    `kubectl describe secret my-password`
+
+- Create a new secret manually using yaml  (Please note that it uses base64 encoding which can easily decoded so do not checkin the .yaml file in source code if you are using this approach)
+
+    see `secret.yaml` 
+
+- See [documentation](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets) to use secrets as files from pod or as environment variables.
+
+
+## Ingress (Ingresscontroller is a layer 7 load balancer)
+
+- Create sample Blue/Green services
+
+    `cd BlueGreenApps`
+
+    `minikube ssh`
+
+    `mkdir blueapp`
+
+    `mkdir greenapp`
+
+    `echo "<h1 style='color:blue'>This is BLUE App<h1>" > blueapp/index.html`
+
+    `echo "<h1 style='color:green'>This is GREEN App<h1>" > greenapp/index.html`
+
+    `kubectl create -f webapp-blue.yaml`
+
+    `kubectl create -f webapp-green.yaml`
+
+    `kubectl create -f webservice-blue.yaml`
+
+    `kubectl create -f webservice-green.yaml`
+
+- Configure ingress controller on minikube
+
+    `minikube addons enable ingress`
+
+    Update the `hosts` file to point to our minikube ip and the host name provided in the `web-ingress.yaml` file
+
+    `kubectl create -f web-ingress.yaml`
+
+    `kubectl get ingress`
+
+    `kubectl describe ingress blue-green-ingress`
+
+
+
+
+
+
 
 
