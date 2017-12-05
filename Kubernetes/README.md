@@ -52,7 +52,7 @@
     Try the cluster url with `Authorization : Bearer <token>`
 
 
-# Deploy an Application
+# Deploy simple Application
 
 - Using Dashoard UI
 
@@ -97,17 +97,30 @@
 - Browse the Service
 
     `http://<local IP>:<NodePort>`
-
     
 
+# Using `hostPath` Volume Type
+
+- Create a volume folder on the host
+
+    `minikube ssh`
+
+    `mkdir -p jomitvolume`
+
+    `cd jomitvolume`
+
+    `echo "Testing Volumes" > index.html`
+
+    `pwd`   (copy the path)
+
+- Create deployments
+
+    `kubectl create -f webserver-volumes.yaml`
+
+    `kubectl create -f webserver-svc.yaml`
+
+- Browse the Service using the local IP and NodePort as done before. (we should see our custom index.html content.)
+
+    `http://<local IP>:<NodePort>`
 
 
-
-
-
-
-
-
-
-
-    
