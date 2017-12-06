@@ -239,6 +239,67 @@
 
     `kubectl describe ingress blue-green-ingress`
 
+## Annotations
+
+- To add extra metadata in key/value pairs to an object. See [documentation](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for more details
+
+
+## Deployment Features
+
+- Deployment object provides features like rollback, autoscaling, proportional scaling, pausing & resuming. See [documentation](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#scaling-a-deployment) for more details.
+
+## Jobs
+
+- Create pods to perform a task and automatically terminates them once the task is over. See [documentation](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/#what-is-a-job) for more details.
+
+- We can also create [cron jobs](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/).
+
+## Quota Management
+
+- [ResourceQuota](https://kubernetes.io/docs/concepts/policy/resource-quotas/) object can be used to control resource consumption per Namespace.
+
+- Types of quotas include : Compute Resource Quota, Storage Resource Quota and Object Count Quota
+
+## DaemonSets
+
+- A special object that allow to create a specific type of Pod which runs on all nodes all the time. 
+
+- Can be used for collecting monitoring data from all nodes or running a storage daemon on all nodes etc. See [documentation](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/) for more details.
+
+## StatefulSets
+
+- StatefulSet controller is used to manage stateful applications that require unique identity, strict ordering. See [documentation](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/) for more details.
+
+## Role Based Access Control (RBAC)
+
+- RBAC API can be used to define roles, permissions for a Namespace or Cluster and then bind to users. See [documentation](https://kubernetes.io/docs/admin/authorization/rbac/) for more details.
+
+## Kubernetes Federation
+
+- [Kubernetes Cluster Federation](https://kubernetes.io/docs/concepts/cluster-administration/federation/) can help manage multiple Kubernetes clusters from a single control plane. 
+- It also helps sync resources across multiple clusters with cross cluster discovery. This allows enables deployments across regions.
+
+## Third Party Resources (Objects) / Custom Resource Definition (CRD)
+
+- Create custom API objects and controllers. [ThirdPartyResource](https://kubernetes.io/docs/tasks/access-kubernetes-api/extend-api-third-party-resource/) is deprecated as of Kubernetes 1.7 and has been removed in version 1.8
+- For version 1.8 you need to use Custom Resource Definition. See details [here](https://kubernetes.io/docs/tasks/access-kubernetes-api/migrate-third-party-resource/)
+
+
+## Helm
+
+- Package manager for Kubernetes. Helps install/update/delete Charts (type of Bundle) in the Kubernetes cluster. See [documentation](https://github.com/kubernetes/helm) for more details.
+
+- The client helm connects to the server tiller to manage Charts. Charts submitted for Kubernetes are available [here](https://github.com/kubernetes/charts).
+
+
+## Monitoring and Logging
+
+- [Heapster](https://kubernetes.io/docs/tasks/debug-application-cluster/resource-usage-monitoring/) is a cluster-wide aggregator of monitoring and event data and is natively supported on Kubernetes. 
+
+- [Prometheus](https://prometheus.io/), now part of [CNCF](https://www.cncf.io/) (Cloud Native Computing Foundation), can also be used to scrape the resource usage from different Kubernetes components and objects. It also has client libraries whic can be used to instrument the application code.
+
+- For Logging the most common way to collect the logs is using [Elasticsearch](https://kubernetes.io/docs/tasks/debug-application-cluster/logging-elasticsearch-kibana/), which uses [fluentd](http://www.fluentd.org/) with custom configuration as an agent on the nodes. fluentd is an open source data collector, which is also part of CNCF.
+
 
 
 
