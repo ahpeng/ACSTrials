@@ -53,6 +53,30 @@
 
     Try the cluster url with `Authorization : Bearer <token>`
 
+- Get Pods Details
+
+    `kubectl get pods -o wide`
+
+    `export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')`
+
+    `echo Name of the Pod: $POD_NAME`
+
+    `curl http://localhost:8001/api/v1/proxy/namespaces/default/pods/$POD_NAME/`
+
+    `kubectl logs $POD_NAME`
+
+    `kubectl exec $POD_NAME env`
+
+    `kubectl exec -ti $POD_NAME bash`
+
+- Get Service Details
+
+    `export NODE_PORT=$(kubectl get services/<service name> -o go-template='{{(index .spec.ports 0).nodePort}}')`
+
+    `echo NODE_PORT=$NODE_PORT`
+
+
+
 
 ## Deploy simple Application
 
@@ -90,7 +114,7 @@
 
     `kubectl get service`
 
-    `kubectl describe svc web-service`   (get NodePort)
+    `kubectl describe svc web-service`   (copy the NodePort)
     
     (`web-service` uses `app=webserver` as a Selector, so it selected the 3 Pods created by `webserver.yaml`, which are listed as `Endpoints` here. So, when we send a request to our Service, it will be served by one of the Pods listed in the Endpoints section)
 
@@ -161,6 +185,26 @@
     `kubectl get deployments`
 
     Browse the frontend to see the `Service from Host` value change depending on which replica is serving the request.
+
+
+## Perform Rolling update for an app
+
+- `kubectl get deployments`
+
+- `kubectl describe pods`  (to see current image version)
+
+- `kubectl set image deployments/<deployment name> <deployment name>=<new docker image>`
+
+    Example : `kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2`
+
+- `kubectl get pods`  (see the pods terminating and updating the new image)
+
+- `kubectl describe pods`  (verify new version of the image)
+
+- `kubectl rollout status deployments/<deployment name>`  (see the rollout status)
+
+- `kubectl rollout undo deployments/<deployment name>`  (undo rollout if there is an error)
+
 
 
 ## ConfigMaps
