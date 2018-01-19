@@ -26,9 +26,9 @@ spec:
         name: tensorflow-trainer
         env:
         - name: STORAGE_ACCOUNT_NAME
-          value: mlgputraining
+          value: mltraininglab
         - name: STORAGE_ACCOUNT_KEY
-          value: <key>
+          value: PKKroMk8k5zYP5YP27P64HW3R60vF5p9malyK8+QT31mMRqxFI49Vgn7Tlkgxw3x5c1YL9it60CH3ii8fMwNBw==
         - name: LD_LIBRARY_PATH
           value: "/usr/lib/nvidia:/usr/lib/x86_64-linux-gnu:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64/"
         resources:
